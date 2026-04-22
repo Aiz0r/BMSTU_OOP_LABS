@@ -1,6 +1,6 @@
 #pragma once
 
-#include "exception.h"
+#include "exceptions.h"
 #include "set.h"
 #include <initializer_list>
 
@@ -87,10 +87,10 @@ Set<T>::~Set()
 
 template <CopyMoveAssignable T>
 template <Convertible<T> U>
-Set<T> &assign(const Set<U> &other)
+Set<T> &Set<T>::assign(const Set<U> &other)
 {
     this->clear();
-    std::ranges::for_each(other, [this](const U &el) { this->add(el)});
+    std::ranges::for_each(other, [this](const U &el) { this->add(el);});
 
     return *this;
 }
@@ -156,50 +156,50 @@ Set<T> &Set<T>::assign(R &&range)
 }
 
 template <CopyMoveAssignable T>
-Set<T> &operator=(const Set<T> &other)
+Set<T> &Set<T>::operator=(const Set<T> &other)
 {
-    return this->assign(other);
+    return assign(other);
 }
 
 template <CopyMoveAssignable T>
 Set<T> &Set<T>::operator=(Set<T> &&other) noexcept
 {
-    return this->assign(std::forward<Set<T>>(other));
+    return assign(std::move(other));
 }
 
 template <CopyMoveAssignable T>
 template <Convertible<T> U>
 Set<T> &Set<T>::operator=(std::initializer_list<U> container)
 {
-    return this->assign(container);
+    return assign(container);
 }
 
 template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T> &Set<T>::operator=(const C &container)
 {
-    return this->assign(container);
+    return assign(container);
 }
 
 template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T> &Set<T>::operator=(C &&container)
 {
-    return this->assign(std::forward<C>(container));
+    return assign(std::forward<C>(container));
 }
 
 template <CopyMoveAssignable T>
 template <ConvertibleRange<T> R>
 Set<T> &Set<T>::operator=(const R &range)
 {
-    return this->assign(range);
+    return assign(range);
 }
 
 template <CopyMoveAssignable T>
 template <ConvertibleRange<T> R>
 Set<T> &Set<T>::operator=(R &&range)
 {
-    return this->assign(std::forward<R>(range));
+    return assign(std::forward<R>(range));
 }
 
 #pragma endregion
@@ -289,19 +289,19 @@ ConstIterator<T> Set<T>::find(const U &value) const
 }
 
 template <CopyMoveAssignable T>
-size_t Set<T>::size() const
+size_t Set<T>::size() const noexcept
 {
     return this->_size;
 }
 
 template <CopyMoveAssignable T>
-bool Set<T>::empty() const
+bool Set<T>::empty() const noexcept
 {
     return this->_size == 0;
 }
 
 template <CopyMoveAssignable T>
-void Set<T>::clear()
+void Set<T>::clear() noexcept
 {
     while (this->head)
     {
@@ -319,7 +319,7 @@ template <CopyMoveAssignable T>
 template <EqualityComparableInputIterator<T> It>
 bool Set<T>::erase(It &pos) noexcept
 {
-    if (pos == this->const_end())
+    if (pos == this->cend())
         return false;
 
     if (this->head == this->tail)
@@ -330,7 +330,7 @@ bool Set<T>::erase(It &pos) noexcept
 
     It next_ind = pos + 1;
 
-    std::shared_ptr<typename Set<T>::SetNode> target_node = pos.curr;
+    std::shared_ptr<typename Set<T>::SetNode> target_node = pos.curr.lock();
 
     if (pos == this->cbegin())
     {

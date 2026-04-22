@@ -1,16 +1,14 @@
 #pragma once
 
 #include "base_container.h"
+#include "concepts"
+#include "exceptions.h"
+#include "iterator.h"
 #include <initializer_list>
+
 #include <compare>
 #include <concepts>
 #include <memory>
-
-
-
-
-#include "set.hpp"
-#include "set_node.hpp"
 
 template <CopyMoveAssignable T>
 class Set : public BaseContainer
@@ -60,41 +58,38 @@ public:
     ~Set() override;
 
 #pragma region Assignment
-    // Копирующий оператор присваивания от множества
+    // От множества
     template <Convertible<T> U>
     Set<T> &assign(const Set<U> &other);
     Set<T> &operator = (const Set<T> &other);
 
-    // Перемещающий оператор присваивания от множества
-    template <Convertible><T> U>
+    template <Convertible<T> U>
     Set<T> &assign(Set<U> &&other) noexcept;
     Set<T> &operator = (Set<T> &&other) noexcept;
 
-    // Копирующий оператор присваивания от списка инициализации
-    template <Convertible><T> U>
+    // От списка инициализации
+    template <Convertible<T> U>
     Set<T> &assign(std::initializer_list<U> ilist);
     template <Convertible<T> U>
     Set<T> &operator = (std::initializer_list<U> ilist);
 
-    // Копирующий оператор присваивания от контейнера
     template <ConvertibleContainer<T> C>
     Set<T> &assign(const C &container);
     template <ConvertibleContainer<T> C>
     Set<T> &operator = (const C &container);
 
-    // Перемещающий оператор присваивания от контейнера
+    // От контейнера
     template <ConvertibleContainer<T> C>
     Set<T> &assign(C &&container);
     template <ConvertibleContainer<T> C>
     Set<T> &operator = (C &&container);
 
-    // Копирующий оператор присваивания от диапазона
+    // От диапазона
     template <ConvertibleRange<T> R>
-    Set<T> &assign(const R &range):
+    Set<T> &assign(const R &range);
     template <ConvertibleRange<T> R>
     Set<T> &operator = (const R &range);
 
-    // Перемещающий оператор присваивания от диапазона
     template <ConvertibleRange<T> R>
     Set<T> &assign(R &&range);
     template <ConvertibleRange<T> R>
@@ -104,10 +99,10 @@ public:
 #pragma region Functions
 
     // базовые функции
-    template <Converible<T> U>
+    template <Convertible<T> U>
     bool add(const U &value);
 
-    template <Convertible><T> U>
+    template <Convertible<T> U>
     bool add(U &&value);
 
     template <EqualityComparable<T> U>
@@ -119,11 +114,11 @@ public:
     template <EqualityComparable<T> U>
     ConstIterator<T> find(const U &value) const;
 
-    size_t size() const override;
+    size_t size() const noexcept override;
 
-    bool empty() const override;
+    bool empty() const noexcept override;
 
-    void clear() override;
+    void clear() noexcept override;
 
     // удаление элемента
     template <EqualityComparable<T> U>
@@ -183,6 +178,21 @@ public:
     Set<T> &intersect(const R &range) noexcept;
 
     // Разность
+    template <HasCommon<T> U>
+    Set<std::common_type_t<T, U>> make_difference(const Set<U> &other) const;
+    template <CommonContainer<T> C>
+    Set<std::common_type_t<T, typename C::value_type>> make_difference(const C &container) const;
+    template <CommonRange<T> R>
+    Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> make_difference(const R &range) const;
+
+    template <Convertible<T> U>
+    Set<T> &subtract(const Set<U> &other) noexcept;
+    template <ConvertibleContainer<T> C>
+    Set<T> &subtract(const C &container) noexcept;
+    template <ConvertibleRange<T> R>
+    Set<T> &subtract(const R &range) noexcept;
+
+    // Симметрическая разость
     template <HasCommon<T> U>
     Set<std::common_type_t<T, U>> make_symm_difference(const Set<U> &other) const;
     
@@ -284,7 +294,7 @@ public:
     Set<T> &operator^=(const C &container);
     template <ConvertibleRange<T> R>
     Set<T> &operator^=(const R &range);
-  
+
 #pragma endregion
 
 #pragma region CompareOperators
@@ -399,6 +409,8 @@ public:
 
 #pragma endregion
 
+
+#pragma region SetNode
 protected:
 
     class SetNode : public std::enable_shared_from_this<SetNode>
@@ -426,7 +438,7 @@ protected:
             void setNull() noexcept;
 
             void setNext(const SetNode &node);
-            void setNext(const std::shared_ptr<SetNode> &pnode) noexcept;
+            void setNext(const std::shared_ptr<SetNode> &node) noexcept;
             void setNextNull() noexcept;
 
             const T &value() const noexcept;
@@ -452,3 +464,6 @@ private:
     std::shared_ptr<SetNode> head;
     std::shared_ptr<SetNode> tail;
 };
+
+#include "set.hpp"
+#include "set_node.hpp"
