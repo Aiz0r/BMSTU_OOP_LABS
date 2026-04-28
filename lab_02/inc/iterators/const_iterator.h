@@ -1,31 +1,17 @@
 #pragma once
 
+#include "base_iterator.h"
 #include "concepts.h"
 
 #include <iterator>
 #include <memory>
 
-template <CopyMoveAssignable T>
-class Set;
+template <CopyMoveAssignable T> class Set;
 
-template <CopyMoveAssignable T>
-class BaseIterator
-{
-public:
-    BaseIterator() = default;
-    virtual ~BaseIterator() = 0;
-
-protected:
-    std::weak_ptr<typename Set<T>::SetNode> curr;
-    friend class Set<T>;
-};
-
-
-template <CopyMoveAssignable T>
-class ConstIterator : public BaseIterator<T>
+template <CopyMoveAssignable T> class ConstIterator : public BaseIterator<T>
 {
 
-public:
+  public:
     using pointer = std::shared_ptr<T>;
     using reference = T &;
     using value_type = T;
@@ -57,9 +43,8 @@ public:
     ConstIterator<T> &operator++() noexcept;
     ConstIterator<T> operator++(int) noexcept;
 
-private:
+  private:
     typename Set<T>::SetNode &getCurr() const;
 };
 
-
-#include "iterator.hpp"
+#include "const_iterator.hpp"

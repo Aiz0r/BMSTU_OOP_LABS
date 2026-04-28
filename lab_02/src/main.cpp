@@ -35,7 +35,7 @@ void test_cctors()
     std::cout << is4 << std::endl;
 
     // 5. Вызов конструктора переноса
-    Set<int> is5(std::move(Set<int>({1, 2, 3, 4}))); //  как создать правую ссылку?
+    Set<int> is5(std::move(Set<int>({1, 2, 3, 4})));
     std::cout << "5. Конструктор переноса: ";
     std::cout << is5 << std::endl;
 
@@ -153,9 +153,7 @@ void test_assign()
     Set<int> is3;
 
     is1 = is2 = is3 = {1, 2, 3, 4};
-    std::cout << "\t" << is1 << std::endl
-              << "\t" << is2 << std::endl
-              << "\t" << is3 << std::endl;
+    std::cout << "\t" << is1 << std::endl << "\t" << is2 << std::endl << "\t" << is3 << std::endl;
 
     std::cout << "=====================================\n";
 }
@@ -167,8 +165,7 @@ void test_union()
     Set<int> is1{1, 2, 3, 4, 5};
     Set<int> is2{4, 5, 6, 7, 8};
 
-    std::cout << "1. Объединение множеств " << is1 << " и " << is2
-              << " с созданием нового мн-ва:" << std::endl;
+    std::cout << "1. Объединение множеств " << is1 << " и " << is2 << " с созданием нового мн-ва:" << std::endl;
 
     Set<int> is3 = is1.make_union(is2);
     std::cout << "\tmake_union: " << is3 << std::endl;
@@ -179,8 +176,7 @@ void test_union()
     is3 = is1 + is2;
     std::cout << "\toperator |: " << is3 << std::endl;
 
-    std::cout << "2. Объединение множеств " << is1 << " и " << is2
-              << " с модификацией исходного мн-ва:" << std::endl;
+    std::cout << "2. Объединение множеств " << is1 << " и " << is2 << " с модификацией исходного мн-ва:" << std::endl;
 
     is3 = is1;
     is3.unite(is2);
@@ -209,8 +205,7 @@ void test_intersection()
     Set<int> is1{1, 2, 3, 4, 5};
     Set<int> is2{4, 5, 6, 7, 8};
 
-    std::cout << "1. Пересечение множеств " << is1 << " и " << is2
-              << " с созданием нового мн-ва:" << std::endl;
+    std::cout << "1. Пересечение множеств " << is1 << " и " << is2 << " с созданием нового мн-ва:" << std::endl;
 
     Set<int> is3 = is1.make_intersection(is2);
     std::cout << "\tmake_intersection: " << is3 << std::endl;
@@ -218,8 +213,7 @@ void test_intersection()
     is3 = is1 & is2;
     std::cout << "\toperator &: " << is3 << std::endl;
 
-    std::cout << "2. Пересечение множеств " << is1 << " и " << is2
-              << " с модификацией исходного мн-ва:" << std::endl;
+    std::cout << "2. Пересечение множеств " << is1 << " и " << is2 << " с модификацией исходного мн-ва:" << std::endl;
 
     is3 = is1;
     is3.intersect(is2);
@@ -386,12 +380,10 @@ void test_comparison()
 
 int main()
 {
-    static_assert(std::forward_iterator<ConstIterator<int>>,
-                  "Iterator does not satisfy std::forward_iterator");
-
-    static_assert(Container<Set<int>>, "Set does not satisfy Container");
-    static_assert(Container<std::vector<int>>, "Vector does not satisfy Container");
-    static_assert(std::ranges::input_range<Set<int>>, "Set does not satisfy input range");
+    static_assert(std::forward_iterator<ConstIterator<int>>);
+    static_assert(Container<Set<int>>);
+    static_assert(Container<std::vector<int>>);
+    static_assert(std::ranges::input_range<Set<int>>);
 
     // ==================== ТЕСТЫ ==================
     test_cctors();
@@ -414,4 +406,3 @@ int main()
 
     return 0;
 }
-

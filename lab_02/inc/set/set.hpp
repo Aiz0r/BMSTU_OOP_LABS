@@ -10,28 +10,22 @@
 
 #pragma region Constructors
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T>::Set(const size_t size, const U *array) : Set()
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T>::Set(const size_t size, const U *array) : Set()
 {
     std::ranges::for_each(array, array + size, [this](const U &el) { this->add(el); });
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T>::Set(std::initializer_list<U> ilist) : Set()
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T>::Set(std::initializer_list<U> ilist) : Set()
 {
     std::ranges::for_each(ilist, [this](const U &el) { this->add(el); });
 }
 
-template <CopyMoveAssignable T>
-Set<T>::Set(const Set<T> &other) : Set()
+template <CopyMoveAssignable T> Set<T>::Set(const Set<T> &other) : Set()
 {
     std::ranges::for_each(other, [this](const T &el) { this->add(el); });
 }
 
-template <CopyMoveAssignable T>
-Set<T>::Set(Set<T> &&other) noexcept
+template <CopyMoveAssignable T> Set<T>::Set(Set<T> &&other) noexcept
 {
     this->_size = other._size;
     this->head = std::move(other.head);
@@ -47,57 +41,34 @@ Set<T>::Set(const It &begin, const S &end)
     std::ranges::for_each(begin, end, [this](const T &el) { this->add(el); });
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T>::Set(const C &container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T>::Set(const C &container)
 {
     std::ranges::for_each(container, [this](const T &value) { this->add(value); });
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T>::Set(C &&container)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T>::Set(const R &range)
 {
-    std::ranges::for_each(container, [this](const T &value) { this->add(std::move(value)); });
-}
-
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T>::Set(const R &range)
-{
-    std::ranges::for_each(range, [this](const T &value){ this->add(value); });
-}
-
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T>::Set(R &&range)
-{
-    std::ranges::for_each(range, [this](auto &&value){ this->add(std::move(value)); });
+    std::ranges::for_each(range, [this](const T &value) { this->add(value); });
 }
 
 #pragma endregion
 
-template <CopyMoveAssignable T>
-Set<T>::~Set()
+template <CopyMoveAssignable T> Set<T>::~Set()
 {
     this->clear();
 }
 
 #pragma region Assignment
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::assign(const Set<U> &other)
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::assign(const Set<U> &other)
 {
     this->clear();
-    std::ranges::for_each(other, [this](const U &el) { this->add(el);});
+    std::ranges::for_each(other, [this](const U &el) { this->add(el); });
 
     return *this;
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::assign(Set<U> &&other) noexcept
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::assign(Set<U> &&other) noexcept
 {
     this->clear();
 
@@ -110,59 +81,47 @@ Set<T> &Set<T>::assign(Set<U> &&other) noexcept
     return *this;
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::assign(std::initializer_list<U> ilist)
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::assign(std::initializer_list<U> ilist)
 {
     this->clear();
-    std::ranges::for_each(ilist, [this](const T &el){ this->add(el); });
+    std::ranges::for_each(ilist, [this](const T &el) { this->add(el); });
     return *this;
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::assign(const C &container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::assign(const C &container)
 {
     this->clear();
-    std::ranges::for_each(container, [this](const T &el){ this->add(el); });
+    std::ranges::for_each(container, [this](const T &el) { this->add(el); });
     return *this;
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::assign(C &&container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::assign(C &&container)
 {
     this->clear();
-    std::ranges::for_each(container, [this](const T &el){ this->add(std::move(el)); });
+    std::ranges::for_each(container, [this](const T &el) { this->add(std::move(el)); });
     return *this;
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::assign(const R &range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::assign(const R &range)
 {
     this->clear();
-    std::ranges::for_each(range, [this](const T &el){ this->add(el); });
+    std::ranges::for_each(range, [this](const T &el) { this->add(el); });
     return *this;
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::assign(R &&range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::assign(R &&range)
 {
     this->clear();
-    std::ranges::for_each(range, [this](const T &el){ this->add(std::move(el)); });
+    std::ranges::for_each(range, [this](const T &el) { this->add(std::move(el)); });
     return *this;
 }
 
-template <CopyMoveAssignable T>
-Set<T> &Set<T>::operator=(const Set<T> &other)
+template <CopyMoveAssignable T> Set<T> &Set<T>::operator=(const Set<T> &other)
 {
     return assign(other);
 }
 
-template <CopyMoveAssignable T>
-Set<T> &Set<T>::operator=(Set<T> &&other) noexcept
+template <CopyMoveAssignable T> Set<T> &Set<T>::operator=(Set<T> &&other) noexcept
 {
     return assign(std::move(other));
 }
@@ -174,30 +133,22 @@ Set<T> &Set<T>::operator=(std::initializer_list<U> container)
     return assign(container);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::operator=(const C &container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::operator=(const C &container)
 {
     return assign(container);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::operator=(C &&container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::operator=(C &&container)
 {
     return assign(std::forward<C>(container));
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::operator=(const R &range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::operator=(const R &range)
 {
     return assign(range);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::operator=(R &&range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::operator=(R &&range)
 {
     return assign(std::forward<R>(range));
 }
@@ -206,8 +157,7 @@ Set<T> &Set<T>::operator=(R &&range)
 
 #pragma region Functions
 
-template <CopyMoveAssignable T>
-bool Set<T>::add(const std::shared_ptr<typename Set<T>::SetNode> &node)
+template <CopyMoveAssignable T> bool Set<T>::add(const std::shared_ptr<typename Set<T>::SetNode> &node)
 {
     if (this->in(node->value()))
         return false;
@@ -227,9 +177,7 @@ bool Set<T>::add(const std::shared_ptr<typename Set<T>::SetNode> &node)
     return true;
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-bool Set<T>::add(const U &value)
+template <CopyMoveAssignable T> template <Convertible<T> U> bool Set<T>::add(const U &value)
 {
     if (this->in(value))
         return false;
@@ -247,9 +195,7 @@ bool Set<T>::add(const U &value)
     return add(newNode);
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-bool Set<T>::add(U &&value)
+template <CopyMoveAssignable T> template <Convertible<T> U> bool Set<T>::add(U &&value)
 {
     if (this->in(value))
         return false;
@@ -267,9 +213,7 @@ bool Set<T>::add(U &&value)
     return add(newNode);
 }
 
-template <CopyMoveAssignable T>
-template <EqualityComparable<T> U>
-bool Set<T>::in(const U &value) const noexcept
+template <CopyMoveAssignable T> template <EqualityComparable<T> U> bool Set<T>::in(const U &value) const noexcept
 {
     return this->find(value) != this->cend();
 }
@@ -281,27 +225,22 @@ bool Set<T>::in(const It &it) const noexcept
     return this->in(*it);
 }
 
-template <CopyMoveAssignable T>
-template <EqualityComparable<T> U>
-ConstIterator<T> Set<T>::find(const U &value) const
+template <CopyMoveAssignable T> template <EqualityComparable<T> U> ConstIterator<T> Set<T>::find(const U &value) const
 {
     return std::find(this->begin(), this->end(), value);
 }
 
-template <CopyMoveAssignable T>
-size_t Set<T>::size() const noexcept
+template <CopyMoveAssignable T> size_t Set<T>::size() const noexcept
 {
     return this->_size;
 }
 
-template <CopyMoveAssignable T>
-bool Set<T>::empty() const noexcept
+template <CopyMoveAssignable T> bool Set<T>::empty() const noexcept
 {
     return this->_size == 0;
 }
 
-template <CopyMoveAssignable T>
-void Set<T>::clear() noexcept
+template <CopyMoveAssignable T> void Set<T>::clear() noexcept
 {
     while (this->head)
     {
@@ -315,9 +254,7 @@ void Set<T>::clear() noexcept
     this->_size = 0;
 }
 
-template <CopyMoveAssignable T>
-template <EqualityComparableInputIterator<T> It>
-bool Set<T>::erase(It &pos) noexcept
+template <CopyMoveAssignable T> template <EqualityComparableInputIterator<T> It> bool Set<T>::erase(It &pos) noexcept
 {
     if (pos == this->cend())
         return false;
@@ -355,9 +292,7 @@ bool Set<T>::erase(It &pos) noexcept
     return true;
 }
 
-template <CopyMoveAssignable T>
-template <EqualityComparable<T> U>
-bool Set<T>::erase(const U &value) noexcept
+template <CopyMoveAssignable T> template <EqualityComparable<T> U> bool Set<T>::erase(const U &value) noexcept
 {
     ConstIterator<T> ind = this->find(value);
     if (ind == this->cend())
@@ -371,32 +306,27 @@ bool Set<T>::erase(const U &value) noexcept
 
 #pragma region Iterators
 
-template <CopyMoveAssignable T>
-ConstIterator<T> Set<T>::cbegin() const noexcept
+template <CopyMoveAssignable T> ConstIterator<T> Set<T>::cbegin() const noexcept
 {
     return ConstIterator<T>(this->head);
 }
 
-template <CopyMoveAssignable T>
-ConstIterator<T> Set<T>::cend() const noexcept
+template <CopyMoveAssignable T> ConstIterator<T> Set<T>::cend() const noexcept
 {
     return this->tail ? ConstIterator<T>(this->tail->getNext()) : ConstIterator<T>();
 }
 
-template <CopyMoveAssignable T>
-ConstIterator<T> Set<T>::begin() const noexcept
+template <CopyMoveAssignable T> ConstIterator<T> Set<T>::begin() const noexcept
 {
     return this->cbegin();
 }
 
-template <CopyMoveAssignable T>
-ConstIterator<T> Set<T>::end() const noexcept
+template <CopyMoveAssignable T> ConstIterator<T> Set<T>::end() const noexcept
 {
     return this->cend();
 }
 
 #pragma endregion
-
 
 #pragma region MathOperations
 
@@ -410,11 +340,9 @@ Set<std::common_type_t<T, U>> Set<T>::make_union(const Set<U> &other) const
     return set_union;
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::unite(const Set<U> &other)
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::unite(const Set<U> &other)
 {
-    std::ranges::for_each(other, [this](const U &el){ this->add(el); });
+    std::ranges::for_each(other, [this](const U &el) { this->add(el); });
 
     return *this;
 }
@@ -428,11 +356,9 @@ Set<std::common_type_t<T, typename C::value_type>> Set<T>::make_union(const C &c
     return set_union;
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::unite(const C &container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::unite(const C &container)
 {
-    std::ranges::for_each(container, [this](const T &el){ this->add(el); });
+    std::ranges::for_each(container, [this](const T &el) { this->add(el); });
     return *this;
 }
 
@@ -445,11 +371,9 @@ Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_
     return set_union;
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::unite(const R &range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::unite(const R &range)
 {
-    std::ranges::for_each(range, [this](const T &el){ this->add(el); });
+    std::ranges::for_each(range, [this](const T &el) { this->add(el); });
     return *this;
 }
 
@@ -459,15 +383,13 @@ Set<std::common_type_t<T, U>> Set<T>::make_intersection(const Set<U> &other) con
 {
     Set<std::common_type_t<T, U>> copy;
 
-    auto filtered = *this | std::views::filter([&](const auto &el){ return other.in(el); });
-    std::ranges::for_each(filtered, [&](const auto &el){ copy.add(el); });
+    auto filtered = *this | std::views::filter([&](const auto &el) { return other.in(el); });
+    std::ranges::for_each(filtered, [&](const auto &el) { copy.add(el); });
 
     return copy;
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::intersect(const Set<U> &other) noexcept
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::intersect(const Set<U> &other) noexcept
 {
     for (auto it = this->cbegin(); it != this->cend();)
     {
@@ -484,8 +406,9 @@ template <CommonContainer<T> C>
 Set<std::common_type_t<T, typename C::value_type>> Set<T>::make_intersection(const C &container) const
 {
     Set<std::common_type_t<T, typename C::value_type>> copy;
-    auto filtered = *this | std::views::filter([&](const auto &el){ return std::ranges::find(container, el) != container.cend(); });
-    std::ranges::for_each(filtered, [&](const auto &el){ copy.add(el); });
+    auto filtered = *this | std::views::filter(
+                                [&](const auto &el) { return std::ranges::find(container, el) != container.cend(); });
+    std::ranges::for_each(filtered, [&](const auto &el) { copy.add(el); });
 
     return copy;
 }
@@ -510,15 +433,14 @@ template <CommonRange<T> R>
 Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_intersection(const R &range) const
 {
     Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> copy;
-    auto filtered = *this | std::views::filter([&](const auto &el){ return std::ranges::find(range, el) != range.cend(); });
-    std::ranges::for_each(filtered, [&](const auto &el){ copy.add(el); });
+    auto filtered =
+        *this | std::views::filter([&](const auto &el) { return std::ranges::find(range, el) != range.cend(); });
+    std::ranges::for_each(filtered, [&](const auto &el) { copy.add(el); });
 
     return copy;
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::intersect(const R &range) noexcept
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::intersect(const R &range) noexcept
 {
     for (auto it = this->cbegin(); it != this->cend();)
     {
@@ -536,16 +458,14 @@ template <HasCommon<T> U>
 Set<std::common_type_t<T, U>> Set<T>::make_difference(const Set<U> &other) const
 {
     Set<std::common_type_t<T, U>> copy(*this);
-    std::ranges::for_each(other, [&](const U &el){ copy.erase(el); });
+    std::ranges::for_each(other, [&](const U &el) { copy.erase(el); });
 
     return copy;
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::subtract(const Set<U> &other) noexcept
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::subtract(const Set<U> &other) noexcept
 {
-    std::ranges::for_each(other, [this](const U &el){ this->erase(el); });
+    std::ranges::for_each(other, [this](const U &el) { this->erase(el); });
 
     return *this;
 }
@@ -555,7 +475,7 @@ template <CommonContainer<T> C>
 Set<std::common_type_t<T, typename C::value_type>> Set<T>::make_difference(const C &container) const
 {
     Set<std::common_type_t<T, typename C::value_type>> copy(*this);
-    std::ranges::for_each(container, [&](const auto &el){ copy.erase(el); });
+    std::ranges::for_each(container, [&](const auto &el) { copy.erase(el); });
 
     return copy;
 }
@@ -564,27 +484,24 @@ template <CopyMoveAssignable T>
 template <ConvertibleContainer<T> C>
 Set<T> &Set<T>::subtract(const C &container) noexcept
 {
-    std::ranges::for_each(container, [this](const auto &el){ this->erase(el); });
+    std::ranges::for_each(container, [this](const auto &el) { this->erase(el); });
 
     return *this;
 }
 
 template <CopyMoveAssignable T>
 template <CommonRange<T> R>
-Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_difference(
-    const R &range) const
+Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_difference(const R &range) const
 {
     Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> copy(*this);
-    std::ranges::for_each(range, [&](const auto &el){ copy.erase(el); });
+    std::ranges::for_each(range, [&](const auto &el) { copy.erase(el); });
 
     return copy;
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::subtract(const R &range) noexcept
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::subtract(const R &range) noexcept
 {
-    std::ranges::for_each(range, [this](const auto &el){ this->erase(el); });
+    std::ranges::for_each(range, [this](const auto &el) { this->erase(el); });
 
     return *this;
 }
@@ -596,9 +513,7 @@ Set<std::common_type_t<T, U>> Set<T>::make_symm_difference(const Set<U> &other) 
     return *this + other - (*this & other);
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::symm_subtract(const Set<U> &other)
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::symm_subtract(const Set<U> &other)
 {
     Set<T> intersection = *this & other;
     *this += other;
@@ -613,9 +528,7 @@ Set<std::common_type_t<T, typename C::value_type>> Set<T>::make_symm_difference(
     return *this + container - (*this & container);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::symm_subtract(const C &container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::symm_subtract(const C &container)
 {
     Set<T> intersection = *this & container;
     *this += container;
@@ -625,15 +538,12 @@ Set<T> &Set<T>::symm_subtract(const C &container)
 
 template <CopyMoveAssignable T>
 template <CommonRange<T> R>
-Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_symm_difference(
-    const R &range) const
+Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::make_symm_difference(const R &range) const
 {
     return *this + range - (*this & range);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::symm_subtract(const R &range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::symm_subtract(const R &range)
 {
     Set<T> intersection = *this & range;
     *this += range;
@@ -664,23 +574,17 @@ Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::opera
     return this->make_union(range);
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::operator+=(const Set<U> &other)
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::operator+=(const Set<U> &other)
 {
     return this->unite(other);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::operator+=(const C &container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::operator+=(const C &container)
 {
     return this->unite(container);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::operator+=(const R &range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::operator+=(const R &range)
 {
     return this->unite(range);
 }
@@ -706,23 +610,17 @@ Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::opera
     return this->make_union(range);
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::operator|=(const Set<U> &other)
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::operator|=(const Set<U> &other)
 {
     return this->unite(other);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::operator|=(const C &container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::operator|=(const C &container)
 {
     return this->unite(container);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::operator|=(const R &range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::operator|=(const R &range)
 {
     return this->unite(range);
 }
@@ -748,9 +646,7 @@ Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::opera
     return this->make_intersection(range);
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::operator&=(const Set<U> &other) noexcept
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::operator&=(const Set<U> &other) noexcept
 {
     return this->intersect(other);
 }
@@ -762,9 +658,7 @@ Set<T> &Set<T>::operator&=(const C &container) noexcept
     return this->intersect(container);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::operator&=(const R &range) noexcept
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::operator&=(const R &range) noexcept
 {
     return this->intersect(range);
 }
@@ -789,9 +683,7 @@ Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::opera
     return this->make_difference(range);
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::operator-=(const Set<U> &other) noexcept
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::operator-=(const Set<U> &other) noexcept
 {
     return this->subtract(other);
 }
@@ -803,9 +695,7 @@ Set<T> &Set<T>::operator-=(const C &container) noexcept
     return this->subtract(container);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::operator-=(const R &range) noexcept
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::operator-=(const R &range) noexcept
 {
     return this->subtract(range);
 }
@@ -834,23 +724,17 @@ Set<std::common_type_t<T, typename std::ranges::range_value_t<R>>> Set<T>::opera
     return this->make_symm_difference(range);
 }
 
-template <CopyMoveAssignable T>
-template <Convertible<T> U>
-Set<T> &Set<T>::operator^=(const Set<U> &other)
+template <CopyMoveAssignable T> template <Convertible<T> U> Set<T> &Set<T>::operator^=(const Set<U> &other)
 {
     return this->symm_subtract(other);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleContainer<T> C>
-Set<T> &Set<T>::operator^=(const C &container)
+template <CopyMoveAssignable T> template <ConvertibleContainer<T> C> Set<T> &Set<T>::operator^=(const C &container)
 {
     return this->symm_subtract(container);
 }
 
-template <CopyMoveAssignable T>
-template <ConvertibleRange<T> R>
-Set<T> &Set<T>::operator^=(const R &range)
+template <CopyMoveAssignable T> template <ConvertibleRange<T> R> Set<T> &Set<T>::operator^=(const R &range)
 {
     return this->symm_subtract(range);
 }
@@ -928,27 +812,6 @@ bool Set<T>::operator==(const R &range) const noexcept
     return this->equal(range);
 }
 
-template <CopyMoveAssignable T>
-template <EqualityComparable<T> U>
-bool Set<T>::operator!=(const Set<U> &other) const noexcept
-{
-    return this->notEqual(other);
-}
-
-template <CopyMoveAssignable T>
-template <EqualityComparableContainer<T> C>
-bool Set<T>::operator!=(const C &container) const noexcept
-{
-    return this->notEqual(container);
-}
-
-template <CopyMoveAssignable T>
-template <EqualityComparableRange<T> R>
-bool Set<T>::operator!=(const R &range) const noexcept
-{
-    return this->notEqual(range);
-}
-
 #pragma endregion
 
 #pragma region CompareFunctions
@@ -999,21 +862,22 @@ template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
 bool Set<T>::subsetOf(const Set<U> &other) const noexcept
 {
-    return std::ranges::all_of(*this, [&](const auto &el){ return other.in(el); });
+    return std::ranges::all_of(*this, [&](const auto &el) { return other.in(el); });
 }
 
 template <CopyMoveAssignable T>
 template <EqualityComparableContainer<T> C>
 bool Set<T>::subsetOf(const C &container) const noexcept
 {
-    return std::ranges::all_of(*this, [&](const auto &el){ return std::ranges::find(container, el) != container.cend(); });
+    return std::ranges::all_of(*this,
+                               [&](const auto &el) { return std::ranges::find(container, el) != container.cend(); });
 }
 
 template <CopyMoveAssignable T>
 template <EqualityComparableRange<T> R>
 bool Set<T>::subsetOf(const R &range) const noexcept
 {
-    return std::ranges::all_of(*this, [&](const auto &el){ return std::ranges::find(range, el) != range.cend(); });
+    return std::ranges::all_of(*this, [&](const auto &el) { return std::ranges::find(range, el) != range.cend(); });
 }
 
 template <CopyMoveAssignable T>
@@ -1027,19 +891,17 @@ template <CopyMoveAssignable T>
 template <EqualityComparableContainer<T> C>
 bool Set<T>::supersetOf(const C &container) const noexcept
 {
-    return std::ranges::all_of(container, [this](const auto &el){ return this->in(el); });
+    return std::ranges::all_of(container, [this](const auto &el) { return this->in(el); });
 }
 
 template <CopyMoveAssignable T>
 template <EqualityComparableRange<T> R>
 bool Set<T>::supersetOf(const R &range) const noexcept
 {
-    return std::ranges::all_of(range, [this](const auto &el){ return this->in(el); });
+    return std::ranges::all_of(range, [this](const auto &el) { return this->in(el); });
 }
 
-template <CopyMoveAssignable T>
-template <EqualityComparable<T> U>
-bool Set<T>::less(const Set<U> &other) const noexcept
+template <CopyMoveAssignable T> template <EqualityComparable<T> U> bool Set<T>::less(const Set<U> &other) const noexcept
 {
     return *this < other;
 }
@@ -1051,9 +913,7 @@ bool Set<T>::less(const C &container) const noexcept
     return *this < container;
 }
 
-template <CopyMoveAssignable T>
-template <EqualityComparableRange<T> R>
-bool Set<T>::less(const R &range) const noexcept
+template <CopyMoveAssignable T> template <EqualityComparableRange<T> R> bool Set<T>::less(const R &range) const noexcept
 {
     return *this < range;
 }
@@ -1093,14 +953,14 @@ template <CopyMoveAssignable T>
 template <EqualityComparableContainer<T> C>
 bool Set<T>::equal(const C &container) const noexcept
 {
-    return this->subsetOf(container) && std::ranges::all_of(container, [this](const auto &el){ return this->in(el); });
+    return this->subsetOf(container) && std::ranges::all_of(container, [this](const auto &el) { return this->in(el); });
 }
 
 template <CopyMoveAssignable T>
 template <EqualityComparableRange<T> R>
 bool Set<T>::equal(const R &range) const noexcept
 {
-    return this->subsetOf(range) && std::ranges::all_of(range, [this](const auto &el){ return this->in(el); });
+    return this->subsetOf(range) && std::ranges::all_of(range, [this](const auto &el) { return this->in(el); });
 }
 
 template <CopyMoveAssignable T>
@@ -1123,7 +983,6 @@ bool Set<T>::notEqual(const R &range) const noexcept
 {
     return !this->equal(range);
 }
-
 
 template <CopyMoveAssignable T>
 template <EqualityComparable<T> U>
@@ -1176,7 +1035,7 @@ template <typename T>
 std::ostream &operator<<(std::ostream &os, const Set<T> &set)
 {
     os << "{";
-    std::ranges::for_each(set, [&](const T &el){ os << el << ", "; });
+    std::ranges::for_each(set, [&](const T &el) { os << el << ", "; });
     os << "}";
     return os;
 }

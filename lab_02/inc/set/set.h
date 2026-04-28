@@ -3,7 +3,7 @@
 #include "base_container.h"
 #include "concepts"
 #include "exceptions.h"
-#include "iterator.h"
+#include "const_iterator.h"
 #include <initializer_list>
 
 #include <compare>
@@ -44,14 +44,8 @@ public:
     template <ConvertibleContainer<T> C>
     explicit Set(const C &container); // от контейнера
 
-    template <ConvertibleContainer<T> C>
-    explicit Set(C &&container);
-
     template <ConvertibleRange<T> R>
     explicit Set(const R &range); // от диапазона
-
-    template <ConvertibleRange<T> R>
-    explicit Set(R &&range);
 
 #pragma endregion
 
@@ -315,13 +309,6 @@ public:
     template <EqualityComparableRange<T> R>
     bool operator==(const R &range) const noexcept;
 
-    // !=
-    template <EqualityComparable<T> U>
-    bool operator!=(const Set<U> &other) const noexcept;
-    template <EqualityComparableContainer<T> C>
-    bool operator!=(const C &container) const noexcept;
-    template <EqualityComparableRange<T> R>
-    bool operator!=(const R &range) const noexcept;
 
 #pragma endregion
 
@@ -415,40 +402,38 @@ protected:
 
     class SetNode : public std::enable_shared_from_this<SetNode>
     {
-        private:
-            T data;
-            std::shared_ptr<SetNode> next;
+    private:
+        T data;
+        std::shared_ptr<SetNode> next;
 
-            // Конструкторы
-            explicit SetNode(const T &value) noexcept;
-            explicit SetNode(T &&value) noexcept;
-            SetNode(const std::shared_ptr<SetNode> next, const T &value) noexcept;
+        // Конструкторы
+        explicit SetNode(const T &value) noexcept;
+        explicit SetNode(T &&value) noexcept;
+        SetNode(const std::shared_ptr<SetNode> next, const T &value) noexcept;
 
-        public:
-            SetNode() = delete;
-            SetNode(const SetNode &other) = delete;
-            SetNode(SetNode &&other) = delete;
+    public:
+        SetNode() = delete;
+        SetNode(const SetNode &other) = delete;
+        SetNode(SetNode &&other) = delete;
 
-            template <typename... Args>
-            static std::shared_ptr<SetNode> create(Args &&...params);
+        template <typename... Args>
+        static std::shared_ptr<SetNode> create(Args &&...params);
 
-            ~SetNode() = default;
-            
-            void set(const T &value) noexcept;
-            void setNull() noexcept;
+        ~SetNode() = default;
 
-            void setNext(const SetNode &node);
-            void setNext(const std::shared_ptr<SetNode> &node) noexcept;
-            void setNextNull() noexcept;
+        void set(const T &value) noexcept;
+        void setNull() noexcept;
 
-            const T &value() const noexcept;
-            std::shared_ptr<T> get();
+        void setNext(const SetNode &node);
+        void setNext(const std::shared_ptr<SetNode> &node) noexcept;
+        void setNextNull() noexcept;
 
-            std::shared_ptr<SetNode> getNext() const noexcept;
+        const T &value() const noexcept;
+        std::shared_ptr<T> get();
 
-            bool operator==(const std::shared_ptr<SetNode> &other) const noexcept;
-            bool operator!=(const std::shared_ptr<SetNode> &other) const noexcept;
+        std::shared_ptr<SetNode> getNext() const noexcept;
 
+        bool operator==(const std::shared_ptr<SetNode> &other) const noexcept;
     };
 
 #pragma endregion
