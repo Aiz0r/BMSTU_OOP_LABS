@@ -230,7 +230,7 @@ template <CopyMoveAssignable T> template <EqualityComparable<T> U> ConstIterator
     return std::find(this->begin(), this->end(), value);
 }
 
-template <CopyMoveAssignable T> size_t Set<T>::size() const noexcept
+template <CopyMoveAssignable T> Set<T>::size_type Set<T>::size() const noexcept
 {
     return this->_size;
 }

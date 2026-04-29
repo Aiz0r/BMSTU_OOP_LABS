@@ -22,7 +22,6 @@ public:
     using const_reference = const T &;
     using iterator = ConstIterator<value_type>;
     using const_iterator = ConstIterator<value_type>;
-    using difference_type = ptrdiff_t;
     using size_type = size_t;
 #pragma endregion
 
@@ -108,7 +107,7 @@ public:
     template <EqualityComparable<T> U>
     ConstIterator<T> find(const U &value) const;
 
-    size_t size() const noexcept override;
+    size_type size() const noexcept override;
 
     bool empty() const noexcept override;
 

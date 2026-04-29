@@ -12,8 +12,7 @@ template <CopyMoveAssignable T> Set<T>::SetNode::SetNode(T &&value) noexcept : d
 }
 
 template <CopyMoveAssignable T>
-Set<T>::SetNode::SetNode(const std::shared_ptr<typename Set<T>::SetNode> curr, const T &value) noexcept
-    : next(curr), data(value)
+Set<T>::SetNode::SetNode(const std::shared_ptr<typename Set<T>::SetNode> curr, const T &value) noexcept : next(curr), data(value)
 {
 }
 

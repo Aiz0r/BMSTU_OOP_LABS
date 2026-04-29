@@ -40,7 +40,6 @@ concept Container = CopyConstructible<C> && std::move_constructible<C> && std::d
     typename std::remove_reference_t<C>::reference;
     typename std::remove_reference_t<C>::const_reference;
     typename std::remove_reference_t<C>::const_iterator;
-    typename std::remove_reference_t<C>::difference_type;
     typename std::remove_reference_t<C>::size_type;
 
     { c.cbegin() } noexcept -> std::same_as<typename std::remove_reference_t<C>::const_iterator>;
