@@ -1,0 +1,13 @@
+CompileFlags:
+  Add: [
+    -I../, 
+    -I../exceptions, 
+    -I../iterators,  
+    -I../set, 
+    -I../inc/set,
+    -I../inc/exceptions,
+    -I../inc/iterators,
+    -std=c++20
+  ]
+Diagnostics:
+  Suppress: ["misc-definitions-in-headers", "constraint_depends_on_self", "ovl_no_viable_function_in_init"]

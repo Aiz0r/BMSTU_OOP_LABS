@@ -1,0 +1,13 @@
+#pragma once
+
+#include "exceptions.h"
+
+#include <cstdio>
+
+IteratorException::IteratorException(const char *info, const std::source_location &loc) noexcept
+    : BaseException(info, loc){};
+
+SetException::SetException(const char *info, const std::source_location &loc) noexcept : BaseException(info, loc){};
+
+MemoryException::MemoryException(const char *info, const std::source_location &loc) noexcept
+    : SetException(info, loc){};
